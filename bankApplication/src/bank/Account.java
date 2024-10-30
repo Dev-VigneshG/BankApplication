@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Account {
-	private static int accountNumber = 0;
+	private static int id = 0;
+	private int accountNumber;
 	private String customerName;
 	private String mailId;
 	private String mobileNumber;
@@ -14,9 +15,13 @@ public class Account {
 
 	private ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
+	public Account(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
 	public static int GenerateAccNumber() {
-		accountNumber++;
-		return accountNumber;
+		id++;
+		return id;
 	}
 
 	public int getAccountNumber() {
@@ -81,13 +86,17 @@ public class Account {
 
 	public void printMiniStatement() {
 		System.out.println("******MINI STATEMENT*****");
+		if (transactions.size() == 0) {
+			System.out.println("No Transactions!");
+			return;
+		}
 		for (Transaction transaction : transactions) {
 			System.out.println(transaction);
 		}
 	}
 
 	public void deposit(float amount, String remark) {
-		Transaction transaction = new Transaction(1, "CR", LocalDateTime.now(), amount, remark);
+		Transaction transaction = new Transaction(Transaction.generateID(), "CR", LocalDateTime.now(), amount, remark);
 		transactions.add(0, transaction);
 		setBalance(currentBalance() + amount);
 	}
@@ -96,7 +105,8 @@ public class Account {
 		if (amount > currentBalance()) {
 			System.out.println("Insufficient Balance!");
 		} else {
-			Transaction transaction = new Transaction(1, "CR", LocalDateTime.now(), amount, remark);
+			Transaction transaction = new Transaction(Transaction.generateID(), "DR", LocalDateTime.now(), amount,
+					remark);
 			transactions.add(0, transaction);
 			setBalance(currentBalance() - amount);
 		}
@@ -109,9 +119,9 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "accountNumber=" + accountNumber + " \n customerName=" + customerName + ",\n mailId=" + mailId
-				+ ", \n mobileNumber=" + mobileNumber + ", \n address=" + address + ",\n  accountType=" + accountType
-				+ ", \n balance=" + balance + ", \n transactions=" + transactions;
+		return "accountNumber=" + accountNumber + " \n customerName=" + customerName + " \n mailId=" + mailId
+				+ " \n mobileNumber=" + mobileNumber + " \n address=" + address + " \n accountType=" + accountType
+				+ " \n balance=" + balance;
 	}
 
 }
