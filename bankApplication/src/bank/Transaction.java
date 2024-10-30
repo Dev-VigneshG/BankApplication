@@ -1,8 +1,10 @@
 package bank;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
+	static int id = 0;
 	int tranactionId;
 	String type;
 	LocalDateTime transDate;
@@ -60,7 +62,14 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return tranactionId + " " + type + " " + transDate + " " + amount + " " + remark;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formattedDate = transDate.format(formatter);
+		return tranactionId + " . " + type + " " + formattedDate + " Remark: " + remark + " RS: " + amount;
+	}
+
+	public static int generateID() {
+		id++;
+		return id;
 	}
 
 }
